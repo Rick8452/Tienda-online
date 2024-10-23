@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
+    "firebase": "^11.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.13.0",
+    "eslint-plugin-vue": "^9.29.1",
+    "globals": "^15.11.0"
+  }
+}

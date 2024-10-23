@@ -1,3 +1,28 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyB98IHoPrws6QP5CAoZvL_HwDrJVqWKcnc",
+  authDomain: "tienda-cnc.firebaseapp.com",
+  projectId: "tienda-cnc",
+  storageBucket: "tienda-cnc.appspot.com",
+  messagingSenderId: "28644465446",
+  appId: "1:28644465446:web:311d978cf7f198fe853fe7",
+  measurementId: "G-18S30B7TD6"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+
+
+
 const carrito = document.getElementById('carrito');
 const elementos1 = document.getElementById('lista-1');
 const vaciarCarritoBtn = document.getElementById('vaciar-carrito');
