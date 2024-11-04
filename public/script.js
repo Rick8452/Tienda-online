@@ -1,8 +1,8 @@
-// Import the functions you need from the SDKs you need
+
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -19,6 +19,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const storage = getStorage(app);
 
 
 
@@ -77,3 +78,33 @@ function vaciarCarrito() {
     }
     return false;
 }
+
+function loadImages() {
+    const images = [
+        { selector: '.logo', path: 'img/menu.png' },
+        { selector: '.submenu #carrito', path: 'img/carrito.png' },
+        { selector: '.product-content .product:nth-child(2) img', path: 'img/imagen2.jpg' },
+        { selector: '.product-content .product:nth-child(3) img', path: 'img/imagen3.jpg' },
+        { selector: '.product-content .product:nth-child(4) img', path: 'img/imagen4.jpg' },
+        { selector: '.product-content .product:nth-child(5) img', path: 'img/imagen5.jpg' },
+        { selector: '.product-content .product:nth-child(6) img', path: 'img/imagen6.jpg' },
+        { selector: '.icons .icon-1:nth-child(1) img', path: 'img/imagen10.jpg' },
+        { selector: '.icons .icon-1:nth-child(2) img', path: 'img/imagen11.jpg' },
+        { selector: '.icons .icon-1:nth-child(3) img', path: 'img/imagen12.jpg' },
+    ];
+
+    images.forEach(image => {
+        const imgRef = ref(storage, image.path);
+        getDownloadURL(imgRef)
+            .then((url) => {
+                const imgElement = document.querySelector(image.selector);
+                if (imgElement) {
+                    imgElement.src = url;
+                }
+            })
+            .catch((error) => {
+                console.error(`Error al cargar la imagen ${image.path}:`, error);
+            });
+    });
+}
+document.addEventListener('DOMContentLoaded', loadImages);
