@@ -21,7 +21,11 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const storage = getStorage(app);
 
-
+const formContacto = document.getElementById('formContacto');
+const nombreInput = document.getElementById('nombre');
+const correoInput = document.getElementById('correo');
+const telefonoInput = document.getElementById('telefono');
+const mensajeInput = document.getElementById('mensaje');
 
 
 const carrito = document.getElementById('carrito');
@@ -78,33 +82,40 @@ function vaciarCarrito() {
     }
     return false;
 }
+formContacto.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-function loadImages() {
-    const images = [
-        { selector: '.logo', path: 'img/menu.png' },
-        { selector: '.submenu #carrito', path: 'img/carrito.png' },
-        { selector: '.product-content .product:nth-child(2) img', path: 'img/imagen2.jpg' },
-        { selector: '.product-content .product:nth-child(3) img', path: 'img/imagen3.jpg' },
-        { selector: '.product-content .product:nth-child(4) img', path: 'img/imagen4.jpg' },
-        { selector: '.product-content .product:nth-child(5) img', path: 'img/imagen5.jpg' },
-        { selector: '.product-content .product:nth-child(6) img', path: 'img/imagen6.jpg' },
-        { selector: '.icons .icon-1:nth-child(1) img', path: 'img/imagen10.jpg' },
-        { selector: '.icons .icon-1:nth-child(2) img', path: 'img/imagen11.jpg' },
-        { selector: '.icons .icon-1:nth-child(3) img', path: 'img/imagen12.jpg' },
-    ];
+    const nombre = nombreInput.value;
+    const correo = correoInput.value;
+    const telefono = telefonoInput.value;
+    const mensaje = mensajeInput.value;
 
-    images.forEach(image => {
-        const imgRef = ref(storage, image.path);
-        getDownloadURL(imgRef)
-            .then((url) => {
-                const imgElement = document.querySelector(image.selector);
-                if (imgElement) {
-                    imgElement.src = url;
-                }
-            })
-            .catch((error) => {
-                console.error(`Error al cargar la imagen ${image.path}:`, error);
-            });
-    });
-}
-document.addEventListener('DOMContentLoaded', loadImages);
+    if (nombre && correo && telefono && mensaje) {
+        // Crear un objeto con los datos
+        const contacto = {
+            nombre: nombre,
+            correo: correo,
+            telefono: telefono,
+            mensaje: mensaje,
+            fecha: new Date().toISOString() // Fecha en formato ISO
+        };
+
+        try {
+            // Guardar el mensaje en Firestore
+            await db.collection('contactos').add(contacto);
+            alert('Mensaje enviado correctamente!');
+            
+            // Limpiar el formulario
+            nombreInput.value = '';
+            correoInput.value = '';
+            telefonoInput.value = '';
+            mensajeInput.value = '';
+        } catch (error) {
+            console.error('Error al enviar el mensaje:', error);
+            alert('Hubo un error al enviar el mensaje.');
+        }
+    } else {
+        alert('Por favor, completa todos los campos.');
+    }
+});
+
